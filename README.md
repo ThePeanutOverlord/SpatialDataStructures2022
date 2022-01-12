@@ -4,6 +4,6 @@
 #### Repo: 4553 Spatial DS Repo
 #### Email: paigechamp@gmail.com
 #### Image:
-![Paige Champagne](https://drive.google.com/file/d/1BrBzXNW1uUSAAGfVOaJllNeurkL-MOLt/view?usp=sharing)
+![Paige Champagne](file:///C:/Users/champ/Downloads/20211119_215900.jpg)
 #### Avatar:
 ![Avatar](https://cs.msutexas.edu/~griffin/zcloud/zcloud-files/einstein_avatar.png)
