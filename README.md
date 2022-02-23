@@ -1,4 +1,4 @@
-# 4553-Spacial-DS-Champagne
+# 4553-Spatial-DS-Champagne
 
 ## Paige Champagne
 #### Repo: 4553 Spatial DS Repo
