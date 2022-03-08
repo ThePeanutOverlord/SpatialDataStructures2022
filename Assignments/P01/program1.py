@@ -4,9 +4,9 @@ import random
 with open("Assignments\P01\cities.json") as f:
   data = json.load(f)
 
-def randColor():
-  r = lambda: random.randint(0,255)
-  return ('#%02X%02X%02X' % (r(),r(),r()))
+# def randColor():
+#   r = lambda: random.randint(0,255)
+#   return ('#%02X%02X%02X' % (r(),r(),r()))
 
 FeatureCollection = {}
 FeatureCollection["type"] = "FeatureCollection"
@@ -14,17 +14,28 @@ FeatureCollection["features"] = []
 
 states = {}
 
+# for item in data:
+#     if not item["state"] in states:
+#       states[item["state"]] = []
+#     states[item["state"]].append(item) #under the state's name, append the item
+
 for item in data:
-    if not item["state"] in states:
-      states[item["state"]] = []
-    states[item["state"]].append(item) #under the state's name, append the item
+    if not item["state"] in states: #fuck it we're just going with one city from each state
+      states[item["state"]] = item
+
+    
+      # states[item["state"]].append(item) #under the state's name, append the item
+    # elif item["state"] in states:
+    #   if int(item["population"]) > int(states[item["state"]["population"]]):
+    #     states[item["state"]] = item
 
 def makePoint(city):
   feature = {
     "type": "Feature",
     "properties": {
-      "marker-color":randColor(),
-      "marker-symbol": 'A'
+      "marker-color":"#E23C71",
+      "marker-symbol": 1,
+      "marker-size": "medium"
     },
     "geometry": {
       "type": "Point",
@@ -41,22 +52,23 @@ def makePoint(city):
 
   return feature
 
-
-# for item in states:
-#   if not item in grtcty:
-#     grtcty[states[item["state"]]] = []
-#     grtcty[states[item["state"]]].append(item)
-
-#   elif item["population"] > grtcty[item["state"]]["population"]:
-#     grtcty[item["state"]] = item
-
-
-# for i in data:
-#   if not i["state"] in grtcty:
-#     grtcty[i["state"]] = []
-#     grtcty[i["state"]].append(item)
-#   elif int(data[i["population"]]) > int(grtcty[i["state"]["population"]]):
-#       grtcty[i["state"]] = data[i]
+def makeLineString(point1, point2):
+  feature = {
+    "type": "Feature",
+    "properties": {
+      "marker-color":"#E23C71",
+      "marker-symbol": 1,
+      "marker-size": "medium"
+    },
+    "geometry": {
+      "type": "LineString",
+      "coordinates": [
+        point1,
+        point2
+      ]
+    }
+  }
+  return feature
 
 # for state in states:
 #   print(f"{state} = {len(states[state])}") #prints amount of times the state appears in data
@@ -70,6 +82,15 @@ FeatureCollection["features"].append(points)
 # points = []
 # for info in data:
 #   points.append(makePoint(info))
+# print(points['geometry']['coordinates'][0])
+lineStrings = []
+
+for i in range(len(points)):
+    if i < len(points)-1:
+     lineStrings.append(makeLineString(points[i]["geometry"]["coordinates"],points[i+1]["geometry"]["coordinates"]))
+
+FeatureCollection["features"].append(lineStrings)
+
 
 with open("Assignments\P01/new.geojson","w") as f:
   json.dump(FeatureCollection,f,indent=4)
