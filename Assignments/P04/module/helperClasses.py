@@ -20,8 +20,8 @@ import sys
 import os
 from rich import print
 # from module import features
-from module.features import Feature,isPoint,isClockWise,isPolygon
-from module.merger import *
+from features import *
+from merger import *
 
 class GeoJsonReader:
     def __init__(self, file_name, **kwargs):
