@@ -1,3 +1,27 @@
+####
+#
+# Author: Paige Champagne
+# Label: Program 3
+# Title: Voronoi - Real World Use Case
+# Course: CMPS 4553
+# Semester: Spring 2022
+#
+# Description: Create a voronoi diagram over the US creating polygons around each of the 49 cities.
+#               Load said polygons into a spatial tree (geopandas rtree).
+#               Load each of the UFO sighting points into the same rtree.
+#               Query the rtree getting the UFO sighting points that are contained within each polygon.
+#               Save results to a json file to be used later (maybe).
+#
+# Files:
+#   input:  cities_small.geojson -cities input file
+#           ufo_data.geojson   -ufo input file
+#           us_nation_border.geojson    -data for the U.S. border
+#   code:   program3.py    -driver code
+#   output: 00_PointsPoly.jpg     -every UFO sighting displayed on the map 
+#           00_voronoi.jpg -Voronoi diagram of the U.S.
+#           ufos_in_Polys.json  -Output file of all the UFO points for each polygon in the above voronoi diagram
+#       
+####
 import numpy as np
 import pandas as pd
 import geopandas as gpd
@@ -233,10 +257,6 @@ if __name__ == "__main__":
     ufos = loadGeoDataFrame("data/ufo_data.geojson")
     usBorder = loadGeoDataFrame("data/us_nation_border.geojson")
 
-    # print the bounding box for the US, but in 4326 (lon/lat format)
-    # print(getBoundingBox(usBorder.to_crs("EPSG:4326")))
-    # print(debug)
-    # show plots if debug == True
     if debug:
         plotBorderAndPoints(usBorder, cities)
         print("done plotting")
@@ -247,37 +267,27 @@ if __name__ == "__main__":
         usBorder, cities
     )
 
-    # print(type(cityCoords))
-    # print(type(boundaryShape))
-    # print(type(regionPolys))
-    # print(type(regionPoints))
 
     # This function creates the spatial index by inserting the ufo
     # geoDataFrame into the spatIndex (keeping with the projection epsg:3395)
     insertSpatIndex(ufos)
 
-    # generate a random number between 0 and 47 (an index for each polygon around our 48 cities)
-    randomPolyIndex = random.randint(0, len(regionPolys)-2)
-
-    # using that random polygon from the voronoi diagram,  find all the UFO's in it using the
-    # spatial index we made.
+    # stores the data to be put in json
     ufosinPolys = {
-      "Points" : []
+      "Polys" : []
     }
+    #cycle through the polygons to get each one
     for i in range(len(regionPolys)):
+        # make a dataframe for each polygon with the ufos inside it
       temp = makeGeoDataFrame(getPolygonUfos(ufos, regionPolys[i]))
-      temp.to_file('ufos_in_Polys.shp', encoding='utf-8') 
-      # ufosinPolys["Points"].append(temp)
-      # ufosinPolys.append(ufosPoly["geometry"])
-
-    # using the results of our query with our polygon, make a dataframe so we can "plot" it
-    # ufoPolyDF = makeGeoDataFrame(results)
+        # append the coordinates of the ufo sightings to the list
+      ufosinPolys["Polys"].append([str(temp["Coordinates"])])
   
     # Now plot the voronoi diagram
     plotVoronoi(cityCoords, boundaryShape, regionPolys, regionPoints, "00_voronoi.jpg")
 
-    # and plot the random poly dataframe we created
-    # plotBorderAndPoints(usBorder, ufoPolyDF, "00_randPointsPoly.jpg")
-
-    # writeJsonData(ufosinPolys, "ufos_in_Polys.json")
+    # and plot the ufos
+    plotBorderAndPoints(usBorder, ufos, "00_PointsPoly.jpg")
+    #write to file
+    writeJsonData(ufosinPolys, "ufos_in_Polys.json")
     # print(ufosinPolys)
