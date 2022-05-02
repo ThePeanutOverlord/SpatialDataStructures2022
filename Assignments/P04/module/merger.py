@@ -171,7 +171,7 @@ class PolyMerger(object):
                     bbox_polys = list(val)
                 if key == self.filterKey:
                     filterVals = list(val)
-
+            print(filterVals)
             for i in range(len(multiPolygons)):
                 print(f"{filterVals[i]} == {self.filterKey}")
                 if (self.filterKey and self.filterVal) and (filterVals[i]
@@ -194,13 +194,13 @@ class PolyMerger(object):
         '''
         new_geometry = mapping(unary_union(
             self.polygons))  # This line merges the polygones
-
+        print(new_geometry['geometries'])
         self.newFeatures = dict(type='Feature',
                                 id="",
                                 properties=dict(Name=""),
                                 geometry=dict(
-                                    type=new_geometry['type'],
-                                    coordinates=new_geometry['coordinates']))
+                                    type=new_geometry['type'], #this is a geometrycollection
+                                    coordinates=new_geometry['geometries'])) #this key needs to be geometries not coordinates
         if self.filterKey and self.filterVal:
             self.newFeatures['properties'][self.filterKey] = self.filterVal
         # print(self.newFeatures)
@@ -240,20 +240,20 @@ def usage():
     sys.exit()
 
 
-# def testFunction(**kwargs):
-#     print(kwargs)
-#     fname = kwargs.get('fname', None)
-#     lname = kwargs.get('lname', None)
-#     ssn = kwargs.get('ssn', None)
-#     weight = kwargs.get('weight', 0)
-#     visa = kwargs.get('visa', None)
+def testFunction(**kwargs):
+    print(kwargs)
+    fname = kwargs.get('fname', None)
+    lname = kwargs.get('lname', None)
+    ssn = kwargs.get('ssn', None)
+    weight = kwargs.get('weight', 0)
+    visa = kwargs.get('visa', None)
 
-#     if not ssn:
-#         print("Error: no social!!")
-#         sys.exit()
+    if not ssn:
+        print("Error: no social!!")
+        sys.exit()
 
-#     print(fname.title())
-#     print(lname.title())
+    print(fname.title())
+    print(lname.title())
 
 if __name__ == '__main__':
     argv = sys.argv[1:]
@@ -267,10 +267,10 @@ if __name__ == '__main__':
     pm = PolyMerger(**kargs)
     pm.writeGeoJson()
 
-    # testFunction(visa=83838383838383,
-    #              weight=132,
-    #              fname='terry',
-    #              ssn=555555555,
-    #              lname='griffin')
+    testFunction(visa=83838383838383,
+                 weight=132,
+                 fname='terry',
+                 ssn=555555555,
+                 lname='griffin')
 
 # "bbox": [-180,41.19268056,180,81.85871003]
