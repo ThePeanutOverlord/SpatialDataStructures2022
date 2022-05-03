@@ -81,7 +81,7 @@ organizes your ability to access a countries polygon data.
 BIG_file = "countries_stanford.geojson"
 small_file = "countries.geojson"
 
-dataPath = "/Users/griffin/Dropbox/_Courses/4553-Spatial-DS/Resources/01_Data/country_and_city_data/"
+dataPath = "C:/Users/champ/OneDrive/Documents/4553-Spatial-DS-Champagne/Assignments/P05/"
 countryDB = CountryReader(os.path.join(dataPath, BIG_file))
 
 
