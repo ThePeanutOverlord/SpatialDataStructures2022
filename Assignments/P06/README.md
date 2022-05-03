@@ -1,4 +1,4 @@
-# Spatial Game 
+# Spatial Game API
 ## Paige Champagne
 
 Using FastApi as a library, write a backend api that can be used to assist your game into becoming a reality.
@@ -24,3 +24,4 @@ Any other routes you may need to help run the game.
 |   api.py    |   [api.py](api.py)          | API code  |
 |   countries_stanford.geojson    |   [countries_stanford.geojson](countries_stanford.geojson)          | Big data file  |
 |   countries.geojson    |   [countries.geojson](countries.geojson)          | normal data file  |
+|   main.py    |   [main.py](main.py)          | I made this when I was first making the API but I don't think I need it anymore  |
