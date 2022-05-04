@@ -51,38 +51,50 @@ if __name__=='__main__':
     foundPoints = []
     
     
-
-        
+    rectWidth = 50
+    prevy=0 
     # creating a bool value which checks
     # if game is running
     running = True
-    
+    r = pygame.Rect(0,0,rectWidth,rectWidth)
     # Game loop
     # keep game running till running is true
     while running:
         
         screen.fill((255,255,255))
         
-        # Check for event if user has pushed
-        # any event in queue
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                    # register click position
-                # r = (pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1], pygame.mouse.get_pos()[0]*100, pygame.mouse.get_pos()[1]*100)
-                pygame.draw.rect(screen,(0,0,0),(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1], pygame.mouse.get_pos()[0]*100, pygame.mouse.get_pos()[1]*100), 3)
-                # qt.bbox = r
-                # qt.query(r,foundPoints)
-            # if event is of type quit then set
-            # running bool to false
-            if event.type == pygame.QUIT:
-                running = False
 
         qt.draw(screen,radius)
         highlightPoints(foundPoints)
-        # pygame.draw.rect(screen,(123,200,77),(0,0,nw[2],nw[3]),3)
-        # qt.query(Rect(size[0]//4,size[1]//4,size[0]//2,size[1]//2),foundPoints)
         
-        # print(foundPoints)
         
+        pygame.draw.rect(screen,(0,0,0), r, 3)
+
+        for event in pygame.event.get():
+          if event.type == pygame.MOUSEBUTTONDOWN:
+            rx,ry=pygame.mouse.get_pos()
+            mouserect= pygame.Rect(rx,ry,100,100)
+            pygame.draw.rect(screen,(0,0,0),mouserect , 3)
+            for p in points: 
+              if mouserect.collidepoint(p.x,p.y):
+               pygame.draw.circle(screen,(255,255,0),[p.x,p.y],radius+3)
+          if event.type == pygame.KEYDOWN:
+                # if press the left arrow key.
+                if event.key == pygame.K_a:
+                  r = pygame.Rect.move(r,-10,0)
+                if event.key == pygame.K_d:
+                  r = pygame.Rect.move(r,10,0)      
+                if event.key == pygame.K_w:
+                  r = pygame.Rect.move(r,0,-10)
+                if event.key == pygame.K_s:
+                  r = pygame.Rect.move(r,0,10)
+          if event.type == pygame.QUIT:
+              running = False
+
+            
+        for p in points:      
+           if r.collidepoint(p.x,p.y):
+             pygame.draw.circle(screen,(255,255,0),[p.x,p.y],radius+3)
+
 
         pygame.display.flip()
